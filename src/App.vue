@@ -22,7 +22,7 @@ fetch('https://pokeapi.co/api/v2/pokemon?limit=151')
 <style>
 .grid_poke {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   grid-gap: 1rem;
 }
 </style>

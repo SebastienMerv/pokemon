@@ -48,7 +48,7 @@ const toggleCardInfos = () => {
 
 <template>
     <div class="poke_card">
-        <img :src="`https://pokeapi.co/api/v2/pokemon/${name}`" alt="Image du pokémon" :id="`img_${name}`" height="300"
+        <img :src="`https://pokeapi.co/api/v2/pokemon/${name}`" alt="Image du pokémon" :id="`img_${name}`" height="200"
             @click="toggleCardInfos">
         <div class="poke_main">
             <h1>{{ name }}</h1>
