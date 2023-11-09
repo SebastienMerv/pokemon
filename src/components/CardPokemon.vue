@@ -60,12 +60,15 @@ const toggleCardInfos = () => {
             <p>{{ captureRate }}</p>
             <p>{{ growthRate }}</p>
             <p>{{ baseHappiness }}</p>
-            <a :href="'./pokemon/' + name" class="data_btn">Plus d'informations</a>
+            <!-- Si la clé a le même nom que la var -> Je peux ne pas mettre le nom de la clé. Exemple name ci-dessous -->
+            <RouterLink :to="{ name: 'PokemonDetail', params: { name } }" class="data_btn">
+                Vers le pokemon
+            </RouterLink>
         </div>
     </div>
 </template>
 
-<style>
+<style scoped>
 .poke_card {
     display: flex;
     flex-direction: column;

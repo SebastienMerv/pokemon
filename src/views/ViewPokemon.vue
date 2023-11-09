@@ -1,13 +1,12 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import PokemonNotFound from './PokemonNotFound.vue';
 
 const route = useRoute()
 
 // On récupère le nom du pokemon
 const name = route.params.name
-
-console.log(name);
 // On set les détails du pokémon
 const details = ref({
     name: '',
@@ -24,59 +23,58 @@ const details = ref({
 
 // On set l'URL de l'image
 const imageUrl = ref('');
+const router = useRouter()
 
 // On récupère les détails du pokémon
-onMounted(() => {
-    fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
-        .then(response => response.json())
-        .then(data => {
-            details.value.name = data.name
-            details.value.height = `Height : ${data.height}`
-            details.value.weight = `Weight : ${data.weight}`
-            details.value.imageUrl = data.sprites.front_default; // Assigner l'URL de l'image
-            fetch(data.species.url)
-                .then(response => response.json())
-                .then(data => {
-                    details.value.captureRate = `Capture Rate : ${data.capture_rate}`
-                    details.value.growthRate = `Growth Rate : ${data.growth_rate.name}`
-                    details.value.baseHappiness = `Expérience : ${data.base_happiness}`
-                    details.value.habitat = `Habitat : ${data.habitat.name}`
-                    details.value.shape = `Shape : ${data.shape.name}`
-                    details.value.color = `Color : ${data.color.name}`
-                    fetch(data.evolution_chain.url)
-                        .then(response => response.json())
-                        .then(data => {
-                            // On boucle sur chaque évolution du pokémon et on affiche son img dans le #evolutions
-                            data.chain.evolves_to.forEach(evolution => {
-                                evolutions.value.push(evolution.species.name)
-                                fetch(`https://pokeapi.co/api/v2/pokemon/${evolution.species.name}`)
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        // On ajouter un li avec une img dedans et autour un a
-                                        const li = document.createElement('li')
-                                        const a = document.createElement('a')
-                                        const img = document.createElement('img')
-                                        img.src = data.sprites.front_default
-                                        img.alt = `Image de ${evolution.species.name}`
-                                        a.href = `./view.html?name=${evolution.species.name}`
-                                        a.appendChild(img)
-                                        li.appendChild(a)
-                                        document.getElementById('evolutions').appendChild(li)
-                                    })
-                                    .catch(error => console.log(error));
-                            })
-                        })
-                        .catch(error => console.log(error))
-                })
-                .catch(error => console.log(error))
+onMounted(async () => {
+
+    try {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
+        if (response.status === 404) {
+            await router.push('/pokemon/404')
+        }
+
+        const data = await response.json()
+        details.value.name = data.name
+        details.value.height = `Height : ${data.height}`
+        details.value.weight = `Weight : ${data.weight}`
+        details.value.imageUrl = data.sprites.front_default; // Assigner l'URL de l'image
+
+        const response2 = await fetch(data.species.url)
+        const data2 = await response2.json()
+        details.value.captureRate = `Capture Rate : ${data2.capture_rate}`
+        details.value.growthRate = `Growth Rate : ${data2.growth_rate.name}`
+        details.value.baseHappiness = `Expérience : ${data2.base_happiness}`
+        details.value.habitat = `Habitat : ${data2.habitat.name}`
+        details.value.shape = `Shape : ${data2.shape.name}`
+        details.value.color = `Color : ${data2.color.name}`
+
+        const response3 = fetch(data.evolution_chain.url)
+        const data3 = await response3.json()
+        // On boucle sur chaque évolution du pokémon et on affiche son img dans le #evolutions
+        data3.chain.evolves_to.forEach(async evolution => {
+            evolutions.value.push(evolution.species.name)
+            const response4 = await fetch(`https://pokeapi.co/api/v2/pokemon/${evolution.species.name}`)
+            const data4 = await response4.json()
+            // On ajouter un li avec une img dedans et autour un a
+            const li = document.createElement('li')
+            const a = document.createElement('a')
+            const img = document.createElement('img')
+            img.src = data4.sprites.front_default
+            img.alt = `Image de ${evolution.species.name}`
+            a.href = `/pokemon/${evolution.species.name}`
+            a.appendChild(img)
+            li.appendChild(a)
+            document.getElementById('evolutions').appendChild(li)
         })
-        .catch(error => {
-            document.getElementById('data_pokemon').style.display = 'none'
-            document.getElementById('evolution_chain').style.display = 'none'
-        })
+    } catch (e) {
+        // Vers l'url -> Création d'une page si tel est le cas
+        // await router.push('/404')
+    }
 })
 </script>
 <template>
+    <RouterLink :to="'/'">Retour</RouterLink>
     <div class="data_pokemon" id="data_pokemon">
         <div class="data_header">
             <h1>Who's That Pokémon? <span id="name">{{ details.name }}</span></h1>
@@ -101,16 +99,17 @@ onMounted(() => {
             </div>
         </div>
     </div>
-    <div class="evolution_chain" id="evolution_chain">
-        <div class="data_header">
-            <h1>Evolution Chain</h1>
-        </div>
-        <ul id="evolutions">
-        </ul>
-    </div>
+    <!-- Doens't work because of Bug -->
+    <!-- <div class="evolution_chain" id="evolution_chain">
+                                        <div class="data_header">
+                                            <h1>Evolution Chain</h1>
+                                        </div>
+                                        <ul id="evolutions">
+                                        </ul>
+                                    </div> -->
 </template>
 
-<style>
+<style scoped>
 .data_pokemon {
     border: 1px solid black;
     margin-top: 20px;
