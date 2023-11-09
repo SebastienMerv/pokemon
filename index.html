@@ -5,20 +5,13 @@
   <meta charset="UTF-8">
   <link rel="icon" href="/favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>POKEMON !</title>
+  <title>Pokemon - By Sébastien Merveille</title>
 </head>
 
 <body>
-  <input type="text" id="search" placeholder="Search for a pokemon"><button id="search_btn">Search</button>
   <div id="app"></div>
   <script type="module" src="/src/main.js"></script>
 
-  <script>
-    document.getElementById('search_btn').addEventListener('click', () => {
-      const search = document.getElementById('search').value
-      window.location.href = `./view.html?name=${search}`
-    })
-  </script>
 </body>
 
 </html>
