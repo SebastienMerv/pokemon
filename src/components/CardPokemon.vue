@@ -60,7 +60,7 @@ const toggleCardInfos = () => {
             <p>{{ captureRate }}</p>
             <p>{{ growthRate }}</p>
             <p>{{ baseHappiness }}</p>
-            <a :href="'./view.html?name=' + name" class="data_btn">Plus d'informations</a>
+            <a :href="'./pokemon/' + name" class="data_btn">Plus d'informations</a>
         </div>
     </div>
 </template>
