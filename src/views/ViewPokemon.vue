@@ -74,7 +74,7 @@ onMounted(async () => {
 })
 </script>
 <template>
-    <RouterLink :to="'/'">Retour</RouterLink>
+    <RouterLink :to="'/pokemon/list'">Retour</RouterLink>
     <div class="data_pokemon" id="data_pokemon">
         <div class="data_header">
             <h1>Who's That Pokémon? <span id="name">{{ details.name }}</span></h1>
@@ -101,12 +101,12 @@ onMounted(async () => {
     </div>
     <!-- Doens't work because of Bug -->
     <!-- <div class="evolution_chain" id="evolution_chain">
-                                        <div class="data_header">
-                                            <h1>Evolution Chain</h1>
-                                        </div>
-                                        <ul id="evolutions">
-                                        </ul>
-                                    </div> -->
+                                            <div class="data_header">
+                                                <h1>Evolution Chain</h1>
+                                            </div>
+                                            <ul id="evolutions">
+                                            </ul>
+                                        </div> -->
 </template>
 
 <style scoped>
