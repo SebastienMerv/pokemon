@@ -1,6 +1,9 @@
 <script setup>
 import { ref } from 'vue'
 import CardPokemon from '@/components/CardPokemon.vue'
+import { useRoute, useRouter } from 'vue-router';
+const route = useRoute()
+const router = useRouter()
 
 const pokemonList = ref([])
 
@@ -11,6 +14,10 @@ fetch('https://pokeapi.co/api/v2/pokemon?limit=151')
     })
     .catch(error => console.log(error))
 
+// Error search
+async function search() {
+    await router.push('/pokemon/' + document.getElementById('search').value)
+};
 </script>
 
 <template>
