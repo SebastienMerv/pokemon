@@ -7,7 +7,7 @@ import { useRoute, useRouter } from 'vue-router';
     <section>
         <p>
             The pokemon you were looking for was not found!<br>
-            You can always continue your search <RouterLink :to="{ name: Home }">here</RouterLink>
+            You can always continue your search <RouterLink :to="{ name: PokemonList }">here</RouterLink>
         </p>
     </section>
 </template>
