@@ -7,7 +7,7 @@ import { useRoute, useRouter } from 'vue-router';
         <h1>Welcome to</h1>
         <h2>Pokemon - Pokédex</h2>
         <p>By Sébastien Merveille</p>
-        <RouterLink :to="{ name: PokemonList }">Naviguate between the pokemon</RouterLink>
+        <RouterLink :to="'/pokemon/list'">Naviguate between the pokemon</RouterLink>
     </section>
 </template>
 

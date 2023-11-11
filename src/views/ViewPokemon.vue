@@ -49,22 +49,17 @@ onMounted(async () => {
         details.value.shape = `Shape : ${data2.shape.name}`
         details.value.color = `Color : ${data2.color.name}`
 
-        const response3 = fetch(data.evolution_chain.url)
+        // on récupère la liste des evolutions et on boucle dessus
+        const response3 = await fetch(data2.evolution_chain.url)
         const data3 = await response3.json()
-        // On boucle sur chaque évolution du pokémon et on affiche son img dans le #evolutions
-        data3.chain.evolves_to.forEach(async evolution => {
-            evolutions.value.push(evolution.species.name)
+        const evolutions = data3.chain.evolves_to
+        evolutions.forEach(async (evolution) => {
             const response4 = await fetch(`https://pokeapi.co/api/v2/pokemon/${evolution.species.name}`)
             const data4 = await response4.json()
-            // On ajouter un li avec une img dedans et autour un a
             const li = document.createElement('li')
-            const a = document.createElement('a')
             const img = document.createElement('img')
             img.src = data4.sprites.front_default
-            img.alt = `Image de ${evolution.species.name}`
-            a.href = `/pokemon/${evolution.species.name}`
-            a.appendChild(img)
-            li.appendChild(a)
+            li.appendChild(img)
             document.getElementById('evolutions').appendChild(li)
         })
     } catch (e) {
@@ -100,13 +95,13 @@ onMounted(async () => {
         </div>
     </div>
     <!-- Doens't work because of Bug -->
-    <!-- <div class="evolution_chain" id="evolution_chain">
-                                            <div class="data_header">
-                                                <h1>Evolution Chain</h1>
-                                            </div>
-                                            <ul id="evolutions">
-                                            </ul>
-                                        </div> -->
+    <div class="evolution_chain" id="evolution_chain">
+        <div class="data_header">
+            <h1>Evolution Chain</h1>
+        </div>
+        <ul id="evolutions">
+        </ul>
+    </div>
 </template>
 
 <style scoped>
@@ -171,5 +166,31 @@ ul {
     flex-direction: row;
     justify-content: space-around;
     list-style-type: none;
+}
+
+/* Animaiton fade in out sur l'img */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+img {
+    transition: opacity 5s ease-in-out;
+    animation: fadeIn 1s;
 }
 </style>
