@@ -14,11 +14,14 @@ const weight = ref('')
 const captureRate = ref('')
 const growthRate = ref('')
 const baseHappiness = ref('')
-
+const types = ref([])
 onMounted(() => {
     fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
         .then(response => response.json())
         .then(data => {
+            data.types.forEach(type => {
+                types.value.push(type.type.name)
+            })
             exp.value = `Base expérience : ${data.base_experience}`
             document.getElementById(`img_${name}`).src = data.sprites.front_default
             height.value = `Height : ${data.height}`
@@ -51,6 +54,9 @@ const toggleCardInfos = () => {
         <img :src="`https://pokeapi.co/api/v2/pokemon/${name}`" alt="Image du pokémon" :id="`img_${name}`" height="200"
             @click="toggleCardInfos">
         <div class="poke_main">
+            <ul>
+                <li v-for="type in types" :key="type"><img :class="'icon ' + type" :src="'/icons/' + type + '.svg'"></li>
+            </ul>
             <h1>{{ name }}</h1>
         </div>
         <div class="poke_card_infos" :id="name" :style="{ display: 'none' }">
@@ -87,6 +93,21 @@ const toggleCardInfos = () => {
     cursor: pointer;
     letter-spacing: 2px;
     transition: all 0.3s ease 0s;
+}
+
+.icon {
+    width: 15px;
+    height: 15px;
+    padding: 5px;
+}
+
+ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    justify-content: space-around;
+    margin-top: 0px;
 }
 
 .data_btn:hover {
